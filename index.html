@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI Solar EV Charging Station</title><meta name="description" content="AI-based solar EV charging station with LSTM PV forecasting and predictive energy management."><meta name="theme-color" content="#0b6b4b"><link rel="stylesheet" href="/static/style.css"></head>
+<body>
+<header class="topbar">
+  <div class="brand"><div class="brand-icon">⚡</div><div><h1 data-i18n="title">AI SOLAR EV STATION</h1><p data-i18n="subtitle">Solar + battery + intelligent charging</p></div></div>
+  <div class="top-actions"><select id="language"><option value="en">English</option><option value="ta">தமிழ்</option><option value="hi">हिन्दी</option></select><button id="demoMode" class="demo-btn">🎓 <span data-i18n="demo">Demo Mode</span></button><div class="status-pill"><span class="dot"></span><span data-i18n="simulation">SOFTWARE SIMULATION</span></div></div>
+</header>
+
+<main>
+<section class="hero-card">
+  <div class="rate-label" id="rateLabel" data-i18n="aiRate">AI recommended charging</div>
+  <div class="rate"><span id="rate">₹18</span><small data-i18n="perUnit">/ unit</small></div>
+  <p id="rateMessage"></p>
+</section>
+
+<section class="card charging-card">
+  <div class="charging-head"><div><span class="eyebrow" data-i18n="charging">EV CHARGING</span><h2 id="chargingTitle" data-i18n="ready">Ready to charge</h2></div><div id="chargingStatus" class="status-badge idle">IDLE</div></div>
+  <div class="vehicle-summary"><div id="vehicleIcon" class="vehicle-big">🛵</div><div><strong id="vehicleName">Scooter</strong><span id="vehicleBatteryLabel">Battery 20%</span></div><div class="battery-meter"><div id="vehicleBatteryBar"></div></div><strong id="vehiclePct">20%</strong></div>
+  <div class="progress-box"><div class="progress-meta"><span data-i18n="chargeProgress">Charging progress</span><b id="chargeProgress">0%</b></div><div class="progress"><div id="progressFill"></div></div><div class="progress-time"><span id="chargedEnergy">0.00 kWh</span><span id="timeRemaining">--</span></div></div>
+  <div class="charge-actions"><button id="startBtn" class="start-btn" data-i18n="start">START SMART CHARGING</button><button id="stopBtn" class="stop-btn" data-i18n="stop">STOP CHARGING</button></div>
+</section>
+
+<section class="saving-card"><div class="saving-icon">₹</div><div><strong id="saving">₹0 saved</strong><span data-i18n="savingText">Estimated solar/battery saving for this charging session</span></div><div class="live-cost"><span data-i18n="liveCost">Live session cost</span><strong id="liveCost">₹0.00</strong></div></section>
+
+<section class="card">
+<h2 data-i18n="need">How much charging do you need?</h2>
+<div class="vehicle-grid"><button class="choice vehicle active" data-vehicle="Scooter" data-base="3"><span class="emoji">🛵</span><strong data-i18n="scooter">Scooter</strong></button><button class="choice vehicle" data-vehicle="Car" data-base="20"><span class="emoji">🚗</span><strong data-i18n="car">Car</strong></button></div>
+<div class="charge-grid"><button class="choice charge" data-mult=".45"><strong data-i18n="topup">Top-up</strong><span>~15 km</span></button><button class="choice charge active" data-mult="1"><strong data-i18n="half">Half charge</strong><span>~40 km</span></button><button class="choice charge" data-mult="1.8"><strong data-i18n="full">Full charge</strong><span>~80 km</span></button></div>
+<div class="estimate-list"><div><span data-i18n="energy">Energy needed</span><strong id="energy">3.00 kWh</strong></div><div><span data-i18n="price">Estimated price</span><strong id="price">₹54</strong></div><div><span data-i18n="solarContribution">Solar contribution</span><strong id="solarShare">0%</strong></div><div><span data-i18n="batteryContribution">Battery contribution</span><strong id="batteryShare">0%</strong></div><div><span data-i18n="gridContribution">Grid contribution</span><strong id="gridShare">100%</strong></div></div>
+<div class="vehicle-battery-control"><label><span data-i18n="startBattery">Starting vehicle battery</span><b id="startPct">20%</b></label><input id="startSlider" type="range" min="5" max="90" value="20"></div>
+</section>
+
+<section class="flow-card card">
+<div class="section-heading"><div><span class="eyebrow" data-i18n="liveFlow">LIVE ENERGY FLOW</span><h2 data-i18n="powerFlow">Power source coordination</h2></div><span class="replay" id="flowState">Monitoring</span></div>
+<div class="flow-diagram">
+  <div class="source solar"><div class="source-icon">☀️</div><strong>PV</strong><span id="pvFlowVal">0 kW</span></div>
+  <div class="flow-line" id="pvLine"><i></i><i></i><i></i></div><div class="flow-arrow">→</div>
+  <div class="center-node"><div class="ev-icon">🚗</div><strong>EV</strong><span id="evFlowVal">15 kW</span></div>
+  <div class="flow-line battery-line" id="batteryLine"><i></i><i></i><i></i></div><div class="flow-arrow">←</div>
+  <div class="source battery"><div class="source-icon">🔋</div><strong>Battery</strong><span id="batFlowVal">0 kW</span></div>
+</div>
+<div class="grid-flow"><div class="grid-source">⚡ <strong>GRID</strong> <span id="gridFlowVal">0 kW</span></div><div class="grid-line" id="gridLine"><i></i><i></i><i></i></div><div class="flow-arrow">→</div><div data-i18n="backup">Backup / deficit supply</div></div>
+</section>
+
+<section class="ai-message card"><div class="ai-icon">🧠</div><div><span class="eyebrow" data-i18n="aiInsight">AI INSIGHT</span><p id="aiMessage">Loading LSTM insight...</p></div></section>
+
+<section class="weather-card card"><div><span class="eyebrow" data-i18n="weather">WEATHER</span><h2 id="weatherState">☀️ Clear / Solar available</h2></div><div class="weather-values"><div><span data-i18n="irr">Irradiance</span><b id="wIrr">--</b></div><div><span data-i18n="ambient">Ambient</span><b id="wAmb">--</b></div><div><span data-i18n="module">Module</span><b id="wMod">--</b></div></div></section>
+
+<section class="live-grid"><div class="mini-card"><span data-i18n="currentPV">Current PV</span><strong id="pv">-- kW</strong></div><div class="mini-card"><span data-i18n="forecast">LSTM forecast</span><strong id="pred">-- kW</strong></div><div class="mini-card"><span data-i18n="soc">Battery SOC</span><strong id="soc">-- %</strong></div><div class="mini-card"><span data-i18n="gridPower">Grid power</span><strong id="grid">-- kW</strong></div></section>
+
+<section class="card advanced">
+<div class="section-heading"><div><span class="eyebrow" data-i18n="advanced">ADVANCED AI / EMS</span><h2 data-i18n="predictive">Predictive Energy Management</h2></div><span class="replay" data-i18n="replay">Dataset replay</span></div>
+<div class="ai-summary"><div><span data-i18n="decision">AI decision</span><strong id="decision">Loading...</strong></div><div><span data-i18n="simTime">Simulation time</span><strong id="time">--</strong></div></div>
+<div class="technical-grid"><div class="tech-panel"><h3 data-i18n="solarForecast">Solar & LSTM Forecast</h3><div class="tech-row"><span data-i18n="irr">Irradiance</span><b id="irr">-- W/m²</b></div><div class="tech-row"><span data-i18n="ambient">Ambient temperature</span><b id="amb">-- °C</b></div><div class="tech-row"><span data-i18n="module">Module temperature</span><b id="mod">-- °C</b></div><div class="tech-row"><span data-i18n="actualPV">Actual PV</span><b id="act">-- kW</b></div><div class="tech-row"><span data-i18n="predictedPV">Predicted PV</span><b id="pred2">-- kW</b></div><div class="tech-row"><span data-i18n="error">Prediction error</span><b id="err">-- kW</b></div></div>
+<div class="tech-panel"><h3 data-i18n="energyFlow">Energy Flow</h3><div class="flow-row"><span>☀️ PV → EV</span><b id="pvflow">-- kW</b></div><div class="flow-row"><span>🔋 Battery → EV</span><b id="batflow">-- kW</b></div><div class="flow-row"><span>⚡ Grid → EV</span><b id="gridflow">-- kW</b></div><div class="flow-row"><span>🔋 <span data-i18n="batterySOC">Battery SOC</span></span><b id="soc2">-- %</b></div><div class="flow-row"><span>🚗 <span data-i18n="evDemand">EV demand</span></span><b id="ev">-- kW</b></div></div></div>
+<div class="chart-wrap"><div class="chart-title"><strong data-i18n="actualVsPred">Actual PV vs LSTM prediction</strong><span data-i18n="recent">Recent simulation samples</span></div><canvas id="chart"></canvas></div>
+<div class="chart-wrap"><div class="chart-title"><strong data-i18n="socChart">Battery SOC</strong><span data-i18n="socRange">20–90% operating window</span></div><canvas id="socchart"></canvas></div>
+<div class="controls"><button onclick="prev()" data-i18n="previousBtn">◀ Previous</button><button onclick="play()" id="play" data-i18n="play">▶ Play simulation</button><button onclick="next()" data-i18n="nextBtn">Next ▶</button><button onclick="reset()" data-i18n="reset">↻ Reset</button></div>
+</section>
+<footer><strong data-i18n="footerTitle">AI Solar EV Charging Station</strong><span data-i18n="footerText">LSTM PV forecasting • Predictive EMS • PV / Battery / Grid coordination</span><small style="display:block;margin-top:8px;opacity:.7">Presentation website • Dataset replay / software simulation • Not live charger telemetry</small></footer>
+</main><script src="/static/dashboard.js"></script></body></html>
